@@ -1,0 +1,43 @@
+; No position restraints for production MD (the protein moves freely!)
+integrator               = md        
+nsteps                   = 25000000  ; 25,000,000 steps * 0.002 ps = 50,000 ps (50 ns)
+dt                       = 0.002     ; 2 femtosecond time step
+
+; Output control (Save coordinates/energies every 100 ps to manage disk space)
+nstxout-compressed       = 50000     ; Write compressed trajectory (.xtc) 
+nstenergy                = 50000     ; Write energies to log
+nstlog                   = 50000     ; Write to log file
+
+; Bond constraints
+constraint_algorithm     = lincs     
+constraints              = h-bonds   
+lincs_iter               = 1         
+lincs_order              = 4         
+
+; Neighborsearching & Cutoffs
+cutoff-scheme            = Verlet
+nstlist                  = 10
+rcoulomb                 = 1.2
+rvdw                     = 1.2
+
+; Electrostatics
+coulombtype              = PME       
+
+; Temperature coupling
+tcoupl                   = V-rescale             
+tc-grps                  = Protein Non-Protein   
+tau_t                    = 0.1     0.1           
+ref_t                    = 300     300           
+
+; Pressure coupling
+pcoupl                   = C-rescale             
+pcoupltype               = isotropic             
+tau_p                    = 2.0                   
+ref_p                    = 1.0                   
+compressibility          = 4.5e-5                
+
+; Periodic boundary conditions
+pbc                      = xyz       
+
+; Velocity generation (DISABLED: Continually carry over velocities from NPT)
+gen_vel                  = no
